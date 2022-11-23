@@ -9,4 +9,8 @@ object Cell {
   implicit val cellFormat: Format[Cell] = Json.format[Cell]
 
   val NULL_OBJECT: Cell = Cell(CellPosition.LeftTop, CellState.Empty)
+
+  def getXCell(position: CellPosition): Cell = Cell(position, CellState.X)
+
+  def getOCell(position: CellPosition): Cell = Cell(position, CellState.O)
 }
