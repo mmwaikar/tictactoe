@@ -29,6 +29,14 @@ object GameState {
     GameState(cells)
   }
 
+  def hasPlayerXWon(state: GameState) = {
+    hasPlayerWon(state, CellState.X)
+  }
+
+  def hasPlayerOWon(state: GameState) = {
+    hasPlayerWon(state, CellState.O)
+  }
+
   def getWinningPositions(state: CellState): Seq[Seq[Cell]] = {
     WinningPositions.map(wp => wp.map(cp => Cell(cp, state)))
   }
@@ -52,5 +60,30 @@ object GameState {
     else logger.debug(s"updated the new position: $position")
 
     maybeUpdatedCells.map(updatedCells => state.copy(cells = updatedCells))
+  }
+
+  def hasPlayerWon(state: GameState, cellState: CellState) = {
+    val cellsForState = state.cells.filter(c => c.state == cellState)
+    logger.debug(s"cells for state: $cellState - $cellsForState")
+
+    if (cellsForState.size < 3) false
+    else {
+      val positions           = cellsForState.map(_.position)
+      val byTopRow            = positions.containsSlice(CellPosition.TopRow)
+      val byCenterRow         = positions.containsSlice(CellPosition.CenterRow)
+      val byBottomRow         = positions.containsSlice(CellPosition.BottomRow)
+      val byLeftColumn        = positions.containsSlice(CellPosition.LeftColumn)
+      val byCenterColumn      = positions.containsSlice(CellPosition.CenterColumn)
+      val byRightColumn       = positions.containsSlice(CellPosition.RightColumn)
+      val byTopBottomDiagonal = positions.containsSlice(CellPosition.TopBottomDiagonal)
+      val byBottomTopDiagonal = positions.containsSlice(CellPosition.BottomTopDiagonal)
+
+      val byRows      = byTopRow || byCenterRow || byBottomRow
+      val byColumns   = byLeftColumn || byCenterColumn || byRightColumn
+      val byDiagonals = byTopBottomDiagonal || byBottomTopDiagonal
+      logger.debug(s"by rows: $byRows, by cols: $byColumns, by diagonals: $byDiagonals")
+
+      byRows || byColumns || byDiagonals
+    }
   }
 }

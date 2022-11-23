@@ -60,5 +60,33 @@ class GameStateSpec extends BaseSpec {
         afterXO.cells.last.state should be(CellState.O)
       }
     }
+
+    "certain moves are made so that the player X has Xs in straight lines, it" should {
+      "result in player X winning" in {
+        val maybeAfterX1 = GameState.playerXMoves(CellPosition.LeftTop, start)
+        // logger.debug(s"after 1 move, game state: ${maybeAfterX1.get}")
+
+        val maybeAfterX1O1 = maybeAfterX1.flatMap(afterX => GameState.playerOMoves(CellPosition.LeftBottom, afterX))
+        // logger.debug(s"after 2 moves, game state: ${maybeAfterX1O1.get}")
+
+        val maybeAfterX2O1 = maybeAfterX1O1.flatMap(afterXO => GameState.playerXMoves(CellPosition.CenterTop, afterXO))
+        // logger.debug(s"after 3 moves, game state: ${maybeAfterX2O1.get}")
+
+        val maybeAfterX2O2 =
+          maybeAfterX2O1.flatMap(afterXO => GameState.playerOMoves(CellPosition.CenterBottom, afterXO))
+        // logger.debug(s"after 4 moves, game state: ${maybeAfterX2O2.get}")
+
+        val maybeAfterX3O2 = maybeAfterX2O2.flatMap(afterXO => GameState.playerXMoves(CellPosition.RightTop, afterXO))
+
+        maybeAfterX3O2 should not be empty
+        val afterX3O2 = maybeAfterX3O2.get
+        logger.debug(s"after 5 moves, game state: $afterX3O2")
+
+        afterX3O2 should not be start
+        afterX3O2.isEmpty should be(false)
+        GameState.hasPlayerOWon(afterX3O2) should be(false) withClue { "Player O won" }
+        GameState.hasPlayerXWon(afterX3O2) should be(true) withClue { "Player X lost" }
+      }
+    }
   }
 }

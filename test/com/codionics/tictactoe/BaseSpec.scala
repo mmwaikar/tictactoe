@@ -1,6 +1,6 @@
 package com.codionics.tictactoe
 
-import org.scalatest.{BeforeAndAfterAll, EitherValues, OptionValues}
+import org.scalatest.{AppendedClues, BeforeAndAfterAll, EitherValues, OptionValues}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers._
 
@@ -9,4 +9,5 @@ abstract class BaseSpec
     with should.Matchers
     with OptionValues
     with EitherValues
+    with AppendedClues
     with BeforeAndAfterAll
