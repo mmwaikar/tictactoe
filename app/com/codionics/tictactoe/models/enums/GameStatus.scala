@@ -13,7 +13,7 @@ object GameStatus extends PlayEnum[GameStatus] {
    */
   val values = findValues
 
-  case object InProcess  extends GameStatus
+  case object InProgress extends GameStatus
   case object PlayerXWon extends GameStatus
   case object PlayerOWon extends GameStatus
   case object Tie        extends GameStatus

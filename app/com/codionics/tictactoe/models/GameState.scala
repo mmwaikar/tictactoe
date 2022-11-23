@@ -7,18 +7,26 @@ import com.codionics.tictactoe.models.CellPosition._
 case class GameState(cells: Seq[Cell]) {
 
   def isEmpty: Boolean = {
-    cells.forall(c => c.state == CellState.Empty)
+    cells.forall(_.state == CellState.Empty)
   }
 }
 
 object GameState {
   implicit val gameStateFormat: Format[GameState] = Json.format[GameState]
 
-  val Start: GameState = startGame()
+  val START: GameState = startGame()
+
+  val WinningXPositions: Seq[Seq[Cell]] = getWinningPositions(CellState.X)
+
+  val WinningOPositions: Seq[Seq[Cell]] = getWinningPositions(CellState.O)
 
   def startGame(): GameState = {
     val cellPositions = TopRow ++ CenterRow ++ BottomRow
     val cells         = cellPositions.map(cp => Cell(cp, CellState.Empty))
     GameState(cells)
+  }
+
+  def getWinningPositions(state: CellState): Seq[Seq[Cell]] = {
+    WinningPositions.map(wp => wp.map(cp => Cell(cp, state)))
   }
 }

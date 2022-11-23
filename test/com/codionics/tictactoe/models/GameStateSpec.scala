@@ -7,9 +7,9 @@ class GameStateSpec extends BaseSpec {
   val logger = Logger(this.getClass())
 
   "Given, GameState" when {
-    "the Start game state is examined" should {
+    "the START game state is examined, it" should {
       "result in an empty game state" in {
-        val start = GameState.Start
+        val start = GameState.START
         logger.debug(s"start game state: $start")
         start.isEmpty should be(true)
       }
