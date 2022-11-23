@@ -2,9 +2,9 @@ package models.enums
 
 import enumeratum._
 
-sealed trait VerticalPosition extends EnumEntry
+sealed trait CellState extends EnumEntry
 
-object VerticalPosition extends PlayEnum[VerticalPosition] {
+object CellState extends PlayEnum[CellState] {
 
   /*
    `findValues` is a protected method that invokes a macro to find all `Greeting` object declarations inside an `Enum`
@@ -13,7 +13,7 @@ object VerticalPosition extends PlayEnum[VerticalPosition] {
    */
   val values = findValues
 
-  case object Top     extends VerticalPosition
-  case object VCenter extends VerticalPosition
-  case object Bottom  extends VerticalPosition
+  case object X     extends CellState
+  case object O     extends CellState
+  case object Empty extends CellState
 }
