@@ -24,7 +24,9 @@ class GameStateSpec extends BaseSpec {
 
         val updated = maybeUpdated.get
         logger.debug(s"updated game state (after X moves): $updated")
+
         updated should not be start
+        updated.isEmpty should be(false)
         updated.cells.head.state should be(CellState.X)
       }
     }
@@ -36,8 +38,26 @@ class GameStateSpec extends BaseSpec {
 
         val updated = maybeUpdated.get
         logger.debug(s"updated game state (after O moves): $updated")
+
         updated should not be start
+        updated.isEmpty should be(false)
         updated.cells.last.state should be(CellState.O)
+      }
+    }
+
+    "player X moves to the left top position and player O moves to the right bottom position, it" should {
+      "result in an updated state" in {
+        val maybeAfterX  = GameState.playerXMoves(CellPosition.LeftTop, start)
+        val maybeAfterXO = maybeAfterX.flatMap(afterX => GameState.playerOMoves(CellPosition.RightBottom, afterX))
+        maybeAfterXO should not be empty
+
+        val afterXO = maybeAfterXO.get
+        logger.debug(s"updated game state (after both X & O move): $afterXO")
+
+        afterXO should not be start
+        afterXO.isEmpty should be(false)
+        afterXO.cells.head.state should be(CellState.X)
+        afterXO.cells.last.state should be(CellState.O)
       }
     }
   }
