@@ -1,4 +1,4 @@
-package models.enums
+package com.codionics.tictactoe.models.enums
 
 import enumeratum._
 

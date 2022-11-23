@@ -10,7 +10,8 @@ libraryDependencies ++= Seq(
   guice,
   "com.beachape"           %% "enumeratum"         % "1.7.0",
   "com.beachape"           %% "enumeratum-play"    % "1.7.0",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+  "org.scalatest"          %% "scalatest"          % "3.2.14" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0"  % Test
 )
 
 // Adds additional packages into Twirl
@@ -18,4 +19,4 @@ libraryDependencies ++= Seq(
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.codionics.binders._"
-play.sbt.routes.RoutesKeys.routesImport += "models.enums._"
+play.sbt.routes.RoutesKeys.routesImport += "com.codionics.tictactoe.models.enums._"
