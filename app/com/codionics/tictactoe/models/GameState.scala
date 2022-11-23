@@ -4,7 +4,12 @@ import play.api.libs.json.{Format, Json}
 import com.codionics.tictactoe.models.enums.{CellState, HorizontalPosition, VerticalPosition}
 import com.codionics.tictactoe.models.CellPosition._
 
-case class GameState(cells: Seq[Cell])
+case class GameState(cells: Seq[Cell]) {
+
+  def isEmpty: Boolean = {
+    cells.forall(c => c.state == CellState.Empty)
+  }
+}
 
 object GameState {
   implicit val gameStateFormat: Format[GameState] = Json.format[GameState]
