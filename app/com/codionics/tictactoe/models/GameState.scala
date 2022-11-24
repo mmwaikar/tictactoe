@@ -7,9 +7,15 @@ import play.api.Logger
 
 case class GameState(cells: Seq[Cell]) {
 
-  def isEmpty: Boolean = {
-    cells.forall(_.state == CellState.Empty)
-  }
+  def isEmpty: Boolean = cells.forall(_.state == CellState.Empty)
+
+  def isInProgress: Boolean = cells.exists(_.state == CellState.Empty)
+
+  def hasPlayerXWon = GameState.hasPlayerWon(this, CellState.X)
+
+  def hasPlayerOWon = GameState.hasPlayerWon(this, CellState.O)
+
+  def isTied = !hasPlayerXWon && !hasPlayerOWon && !isInProgress
 }
 
 object GameState {
@@ -29,12 +35,13 @@ object GameState {
     GameState(cells)
   }
 
-  def hasPlayerXWon(state: GameState) = {
-    hasPlayerWon(state, CellState.X)
-  }
-
-  def hasPlayerOWon(state: GameState) = {
-    hasPlayerWon(state, CellState.O)
+  def getSampleTiedGame(): GameState = {
+    val cellPositions = TopRow ++ CenterRow ++ BottomRow
+    val cells         = cellPositions.zipWithIndex.map { case (cp, index) =>
+      val cellState = if (index % 2 == 0) CellState.X else CellState.O
+      Cell(cp, cellState)
+    }
+    GameState(cells)
   }
 
   def getWinningPositions(state: CellState): Seq[Seq[Cell]] = {

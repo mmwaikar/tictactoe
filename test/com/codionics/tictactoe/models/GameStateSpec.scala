@@ -84,8 +84,23 @@ class GameStateSpec extends BaseSpec {
 
         afterX3O2 should not be start
         afterX3O2.isEmpty should be(false)
-        GameState.hasPlayerOWon(afterX3O2) should be(false) withClue { "Player O won" }
-        GameState.hasPlayerXWon(afterX3O2) should be(true) withClue { "Player X lost" }
+        afterX3O2.hasPlayerOWon should be(false) withClue { "Player O won" }
+        afterX3O2.hasPlayerXWon should be(true) withClue { "Player X lost" }
+      }
+    }
+
+    "neither player has won and there are no more empty cells, it" should {
+      "result in a game which is not in progress" in {
+        val tiedGame = GameState.getSampleTiedGame()
+        tiedGame.isInProgress should be(false)
+      }
+
+      "result in a tied game" in {
+        val tiedGame = GameState.getSampleTiedGame()
+        tiedGame.isEmpty should be(false)
+        tiedGame.hasPlayerXWon should be(false)
+        tiedGame.hasPlayerOWon should be(false)
+        tiedGame.isTied should be(true)
       }
     }
   }
