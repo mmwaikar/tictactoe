@@ -4,6 +4,7 @@ import play.api.libs.json.{Format, Json}
 import com.codionics.tictactoe.models.enums.{CellState, HorizontalPosition, VerticalPosition}
 import com.codionics.tictactoe.models.CellPosition._
 import play.api.Logger
+import com.codionics.tictactoe.models.enums.GameStatus
 
 case class GameState(cells: Seq[Cell]) {
 
@@ -35,13 +36,36 @@ object GameState {
     GameState(cells)
   }
 
-  def getSampleTiedGame(): GameState = {
-    val cellPositions = TopRow ++ CenterRow ++ BottomRow
-    val cells         = cellPositions.zipWithIndex.map { case (cp, index) =>
-      val cellState = if (index % 2 == 0) CellState.X else CellState.O
-      Cell(cp, cellState)
+  def hasPlayerWon(state: GameState, cellState: CellState) = {
+    val cellsForState = state.cells.filter(c => c.state == cellState)
+    logger.debug(s"cells for state: $cellState - $cellsForState")
+
+    if (cellsForState.size < 3) false
+    else {
+      val positions           = cellsForState.map(_.position)
+      val byTopRow            = positions.toSet == CellPosition.TopRow.toSet
+      val byCenterRow         = positions.toSet == CellPosition.CenterRow.toSet
+      val byBottomRow         = positions.toSet == CellPosition.BottomRow.toSet
+      val byLeftColumn        = positions.toSet == CellPosition.LeftColumn.toSet
+      val byCenterColumn      = positions.toSet == CellPosition.CenterColumn.toSet
+      val byRightColumn       = positions.toSet == CellPosition.RightColumn.toSet
+      val byTopBottomDiagonal = positions.toSet == CellPosition.TopBottomDiagonal.toSet
+      val byBottomTopDiagonal = positions.toSet == CellPosition.BottomTopDiagonal.toSet
+
+      val byRows      = byTopRow || byCenterRow || byBottomRow
+      val byColumns   = byLeftColumn || byCenterColumn || byRightColumn
+      val byDiagonals = byTopBottomDiagonal || byBottomTopDiagonal
+      logger.debug(s"by rows: $byRows, by cols: $byColumns, by diagonals: $byDiagonals")
+
+      byRows || byColumns || byDiagonals
     }
-    GameState(cells)
+  }
+
+  def getGameStatus(gameState: GameState) = {
+    if (gameState.hasPlayerXWon) GameStatus.PlayerXWon
+    else if (gameState.hasPlayerOWon) GameStatus.PlayerOWon
+    else if (gameState.isInProgress) GameStatus.InProgress
+    else GameStatus.Tie
   }
 
   def getWinningPositions(state: CellState): Seq[Seq[Cell]] = {
@@ -67,30 +91,5 @@ object GameState {
     else logger.debug(s"updated the new position: $position")
 
     maybeUpdatedCells.map(updatedCells => state.copy(cells = updatedCells))
-  }
-
-  def hasPlayerWon(state: GameState, cellState: CellState) = {
-    val cellsForState = state.cells.filter(c => c.state == cellState)
-    logger.debug(s"cells for state: $cellState - $cellsForState")
-
-    if (cellsForState.size < 3) false
-    else {
-      val positions           = cellsForState.map(_.position)
-      val byTopRow            = positions.containsSlice(CellPosition.TopRow)
-      val byCenterRow         = positions.containsSlice(CellPosition.CenterRow)
-      val byBottomRow         = positions.containsSlice(CellPosition.BottomRow)
-      val byLeftColumn        = positions.containsSlice(CellPosition.LeftColumn)
-      val byCenterColumn      = positions.containsSlice(CellPosition.CenterColumn)
-      val byRightColumn       = positions.containsSlice(CellPosition.RightColumn)
-      val byTopBottomDiagonal = positions.containsSlice(CellPosition.TopBottomDiagonal)
-      val byBottomTopDiagonal = positions.containsSlice(CellPosition.BottomTopDiagonal)
-
-      val byRows      = byTopRow || byCenterRow || byBottomRow
-      val byColumns   = byLeftColumn || byCenterColumn || byRightColumn
-      val byDiagonals = byTopBottomDiagonal || byBottomTopDiagonal
-      logger.debug(s"by rows: $byRows, by cols: $byColumns, by diagonals: $byDiagonals")
-
-      byRows || byColumns || byDiagonals
-    }
   }
 }

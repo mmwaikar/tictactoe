@@ -89,14 +89,25 @@ class GameStateSpec extends BaseSpec {
       }
     }
 
+    "certain moves are made so that the player O has Os in straight lines, it" should {
+      "result in player O winning" in {
+        val oWinning = GameStateHelper.getSampleOWonGame()
+
+        oWinning should not be start
+        oWinning.isEmpty should be(false)
+        oWinning.hasPlayerXWon should be(false) withClue { "Player X won" }
+        oWinning.hasPlayerOWon should be(true) withClue { "Player O lost" }
+      }
+    }
+
     "neither player has won and there are no more empty cells, it" should {
+      val tiedGame = GameStateHelper.getSampleTiedGame()
+
       "result in a game which is not in progress" in {
-        val tiedGame = GameState.getSampleTiedGame()
         tiedGame.isInProgress should be(false)
       }
 
       "result in a tied game" in {
-        val tiedGame = GameState.getSampleTiedGame()
         tiedGame.isEmpty should be(false)
         tiedGame.hasPlayerXWon should be(false)
         tiedGame.hasPlayerOWon should be(false)
