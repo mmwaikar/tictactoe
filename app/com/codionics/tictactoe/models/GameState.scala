@@ -48,9 +48,10 @@ object GameState {
     * @param state
     *   the game state at any moment
     * @return
-    *   a tuple containing an optional reason if the state is not valid & false, else None & true
+    *   a tuple containing: an optional reason, None & false - if the state is not valid, else None, optional state &
+    *   true - if the state is valid
     */
-  def isValid(state: GameState): (Option[String], Boolean) = {
+  def isValid(state: GameState): (Option[String], Option[GameState], Boolean) = {
     val xCells = state.cells.filter(_.state == CellState.X)
     val oCells = state.cells.filter(_.state == CellState.O)
 
@@ -59,10 +60,10 @@ object GameState {
     val absDiff     = (xSize - oSize).abs
     val diffInRange = absDiff.betweenInclusiveBoth(0, 1)
 
-    if (diffInRange) (None, diffInRange)
+    if (diffInRange) (None, Some(state), diffInRange)
     else {
-      if (xSize > oSize) (Some("X has played more than once."), diffInRange)
-      else (Some("O has played more than once."), diffInRange)
+      if (xSize > oSize) (Some("X has played more than once."), None, diffInRange)
+      else (Some("O has played more than once."), None, diffInRange)
     }
   }
 

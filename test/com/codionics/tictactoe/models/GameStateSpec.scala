@@ -104,10 +104,11 @@ class GameStateSpec extends BaseSpec {
         twiceXs should not be start
         twiceXs.isEmpty should be(false)
 
-        val (reason, valid) = GameState.isValid(twiceXs)
-        logger.debug(s"reason: $reason, valid: $valid")
-        reason should not be (empty)
-        reason.get should startWith("X")
+        val (maybeReason, maybeState, valid) = GameState.isValid(twiceXs)
+        logger.debug(s"reason: $maybeReason, valid: $valid")
+        maybeReason should not be (empty)
+        maybeReason.get should startWith("X")
+        maybeState should be(empty)
         valid should be(false)
       }
     }
@@ -118,10 +119,11 @@ class GameStateSpec extends BaseSpec {
         twiceOs should not be start
         twiceOs.isEmpty should be(false)
 
-        val (reason, valid) = GameState.isValid(twiceOs)
-        logger.debug(s"reason: $reason, valid: $valid")
-        reason should not be (empty)
-        reason.get should startWith("O")
+        val (maybeReason, maybeState, valid) = GameState.isValid(twiceOs)
+        logger.debug(s"reason: $maybeReason, valid: $valid")
+        maybeReason should not be (empty)
+        maybeReason.get should startWith("O")
+        maybeState should be(empty)
         valid should be(false)
       }
     }
@@ -132,10 +134,13 @@ class GameStateSpec extends BaseSpec {
         afterXO should not be start
         afterXO.isEmpty should be(false)
 
-        val (reason, valid) = GameState.isValid(afterXO)
-        logger.debug(s"reason: $reason, valid: $valid")
-        reason should be(empty)
+        val (maybeReason, maybeState, valid) = GameState.isValid(afterXO)
+        logger.debug(s"reason: $maybeReason, valid: $valid")
+        maybeReason should be(empty)
+        maybeState should not be (empty)
         valid should be(true)
+
+        maybeState.get should be(afterXO)
       }
     }
   }
