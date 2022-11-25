@@ -14,6 +14,8 @@ import scala.concurrent._
 class GameController @Inject() (val controllerComponents: ControllerComponents)(implicit ec: ExecutionContext)
     extends BaseController {
 
+  val logger: Logger = Logger(this.getClass())
+
   def start() = {
     Action { implicit request: Request[AnyContent] =>
       val start = Game.START
@@ -29,6 +31,27 @@ class GameController @Inject() (val controllerComponents: ControllerComponents)(
           errors => Future(BadRequest(JsError.toJson(errors).toString())),
           move => {
             val eitherState = Move.playerXMoves(move.state, move.position)
+            logger.debug(s"either state: $eitherState")
+
+            eitherState match {
+              case Left(error)  => Future(BadRequest(error))
+              case Right(state) => Future(Created(Json.toJson(Game(state))))
+            }
+          }
+        )
+    }
+  }
+
+  def playerOMoves() = {
+    Action.async(parse.json) { implicit request =>
+      request.body
+        .validate[Move]
+        .fold(
+          errors => Future(BadRequest(JsError.toJson(errors).toString())),
+          move => {
+            val eitherState = Move.playerOMoves(move.state, move.position)
+            logger.debug(s"either state: $eitherState")
+
             eitherState match {
               case Left(error)  => Future(BadRequest(error))
               case Right(state) => Future(Created(Json.toJson(Game(state))))
