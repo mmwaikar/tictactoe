@@ -77,3 +77,9 @@ you can test the application using the `GET` and the two `PUT`(s) for `X` & `O` 
 
 A few sample JSON files are provided in the `docs` folder. The `illegal-moves` folder has JSONs for two moves - 
 `x-1 & o-2`. The `x-wins` folder has 5 JSONs for moves in the order - `x-1, o-1, x-2, o-2 & x-3`.
+
+### Tests
+
+This is a typical Scala application (that follows Java conventions) and the tests are in the 
+`test\com\codionics\tictactoe` folder. Majority of the tests are in the `GameStateSpec` class. The tests could be run
+through `sbt` using the `test` command.
