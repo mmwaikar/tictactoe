@@ -3,7 +3,7 @@ package com.codionics.tictactoe.models
 import com.codionics.tictactoe.models.enums.{HorizontalPosition, VerticalPosition}
 import play.api.libs.json.{Format, Json}
 
-case class CellPosition(horizontalPosition: HorizontalPosition, verticalPosition: VerticalPosition)
+case class CellPosition(horizontal: HorizontalPosition, vertical: VerticalPosition)
 
 object CellPosition {
   implicit val cellPositionFormat: Format[CellPosition] = Json.format[CellPosition]
