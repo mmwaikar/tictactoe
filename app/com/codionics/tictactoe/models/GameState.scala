@@ -1,10 +1,13 @@
 package com.codionics.tictactoe.models
 
-import play.api.libs.json.{Format, Json}
-import com.codionics.tictactoe.models.enums.{CellState, HorizontalPosition, VerticalPosition}
 import com.codionics.tictactoe.models.CellPosition._
-import play.api.Logger
+import com.codionics.tictactoe.models.enums.CellState
 import com.codionics.tictactoe.models.enums.GameStatus
+import com.codionics.tictactoe.models.enums.HorizontalPosition
+import com.codionics.tictactoe.models.enums.VerticalPosition
+import play.api.Logger
+import play.api.libs.json.Format
+import play.api.libs.json.Json
 
 case class GameState(cells: Seq[Cell]) {
 
@@ -18,7 +21,7 @@ case class GameState(cells: Seq[Cell]) {
 
   def isTied = !hasPlayerXWon && !hasPlayerOWon && !isInProgress
 
-  def getRemainingMoves: Seq[Cell] = cells.filter(_.state != CellState.Empty)
+  def getRemainingMoves: Seq[Cell] = cells.filter(_.state == CellState.Empty)
 }
 
 object GameState {
