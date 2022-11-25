@@ -97,5 +97,46 @@ class GameStateSpec extends BaseSpec {
         tiedGame.isTied should be(true)
       }
     }
+
+    "player X moves twice, it" should {
+      "result in an invalid state with the correct reason" in {
+        val twiceXs = GameStateHelper.getSampleGameWithTwiceXMoves()
+        twiceXs should not be start
+        twiceXs.isEmpty should be(false)
+
+        val (reason, valid) = GameState.isValid(twiceXs)
+        logger.debug(s"reason: $reason, valid: $valid")
+        reason should not be (empty)
+        reason.get should startWith("X")
+        valid should be(false)
+      }
+    }
+
+    "player O moves twice, it" should {
+      "result in an invalid state with the correct reason" in {
+        val twiceOs = GameStateHelper.getSampleGameWithTwiceOMoves()
+        twiceOs should not be start
+        twiceOs.isEmpty should be(false)
+
+        val (reason, valid) = GameState.isValid(twiceOs)
+        logger.debug(s"reason: $reason, valid: $valid")
+        reason should not be (empty)
+        reason.get should startWith("O")
+        valid should be(false)
+      }
+    }
+
+    "player X and O move, it" should {
+      "result in an invalid state with the correct reason" in {
+        val afterXO = GameStateHelper.getSampleGameWithXOMoves()
+        afterXO should not be start
+        afterXO.isEmpty should be(false)
+
+        val (reason, valid) = GameState.isValid(afterXO)
+        logger.debug(s"reason: $reason, valid: $valid")
+        reason should be(empty)
+        valid should be(true)
+      }
+    }
   }
 }

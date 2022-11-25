@@ -57,4 +57,25 @@ object GameStateHelper {
 
     maybeAfterO3X2.getOrElse(start)
   }
+
+  def getSampleGameWithTwiceXMoves(): GameState = {
+    val start        = GameState.startGame()
+    val maybeAfterX1 = GameState.playerXMoves(start, CellPosition.LeftTop)
+    val maybeAfterX2 = maybeAfterX1.flatMap(afterX => GameState.playerXMoves(afterX, CellPosition.LeftBottom))
+    maybeAfterX2.getOrElse(start)
+  }
+
+  def getSampleGameWithTwiceOMoves(): GameState = {
+    val start        = GameState.startGame()
+    val maybeAfterO1 = GameState.playerOMoves(start, CellPosition.LeftTop)
+    val maybeAfterO2 = maybeAfterO1.flatMap(afterO => GameState.playerOMoves(afterO, CellPosition.LeftBottom))
+    maybeAfterO2.getOrElse(start)
+  }
+
+  def getSampleGameWithXOMoves(): GameState = {
+    val start        = GameState.startGame()
+    val maybeAfterX1 = GameState.playerXMoves(start, CellPosition.LeftTop)
+    val maybeAfterO1 = maybeAfterX1.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.LeftBottom))
+    maybeAfterO1.getOrElse(start)
+  }
 }

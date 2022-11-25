@@ -5,6 +5,7 @@ import com.codionics.tictactoe.models.enums.CellState
 import com.codionics.tictactoe.models.enums.GameStatus
 import com.codionics.tictactoe.models.enums.HorizontalPosition
 import com.codionics.tictactoe.models.enums.VerticalPosition
+import com.codionics.tictactoe.utils.IntUtils._
 import play.api.Logger
 import play.api.libs.json.Format
 import play.api.libs.json.Json
@@ -39,6 +40,30 @@ object GameState {
     val cellPositions = TopRow ++ CenterRow ++ BottomRow
     val cells         = cellPositions.map(cp => Cell(cp, CellState.Empty))
     GameState(cells)
+  }
+
+  /** Determines if a GameState is valid or not. If at any time, there are two Xs or two Os i.e. if the difference
+    * between the X and O cells is more than 1, then it's an invalid state.
+    *
+    * @param state
+    *   the game state at any moment
+    * @return
+    *   a tuple containing an optional reason if the state is not valid & false, else None & true
+    */
+  def isValid(state: GameState): (Option[String], Boolean) = {
+    val xCells = state.cells.filter(_.state == CellState.X)
+    val oCells = state.cells.filter(_.state == CellState.O)
+
+    val xSize       = xCells.size
+    val oSize       = oCells.size
+    val absDiff     = (xSize - oSize).abs
+    val diffInRange = absDiff.betweenInclusiveBoth(0, 1)
+
+    if (diffInRange) (None, diffInRange)
+    else {
+      if (xSize > oSize) (Some("X has played more than once."), diffInRange)
+      else (Some("O has played more than once."), diffInRange)
+    }
   }
 
   def hasPlayerWon(state: GameState, cellState: CellState) = {
