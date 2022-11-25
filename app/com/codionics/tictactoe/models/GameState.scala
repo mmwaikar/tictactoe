@@ -17,6 +17,8 @@ case class GameState(cells: Seq[Cell]) {
   def hasPlayerOWon = GameState.hasPlayerWon(this, CellState.O)
 
   def isTied = !hasPlayerXWon && !hasPlayerOWon && !isInProgress
+
+  def getRemainingMoves: Seq[Cell] = cells.filter(_.state != CellState.Empty)
 }
 
 object GameState {
