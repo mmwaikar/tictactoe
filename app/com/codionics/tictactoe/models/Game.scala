@@ -10,7 +10,7 @@ object Game {
 
   def apply(state: GameState): Game = {
     val status         = GameState.getGameStatus(state)
-    val remainingMoves = state.getRemainingMoves
+    val remainingMoves = if (status == GameStatus.InProgress) state.getRemainingMoves else Seq.empty
     Game(state, status, remainingMoves)
   }
 
