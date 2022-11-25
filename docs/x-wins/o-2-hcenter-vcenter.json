@@ -1,0 +1,73 @@
+{
+  "state": {
+    "cells": [
+      {
+        "position": {
+          "horizontal": "Left",
+          "vertical": "Top"
+        },
+        "state": "X"
+      },
+      {
+        "position": {
+          "horizontal": "HCenter",
+          "vertical": "Top"
+        },
+        "state": "O"
+      },
+      {
+        "position": {
+          "horizontal": "Right",
+          "vertical": "Top"
+        },
+        "state": "Empty"
+      },
+      {
+        "position": {
+          "horizontal": "Left",
+          "vertical": "VCenter"
+        },
+        "state": "X"
+      },
+      {
+        "position": {
+          "horizontal": "HCenter",
+          "vertical": "VCenter"
+        },
+        "state": "Empty"
+      },
+      {
+        "position": {
+          "horizontal": "Right",
+          "vertical": "VCenter"
+        },
+        "state": "Empty"
+      },
+      {
+        "position": {
+          "horizontal": "Left",
+          "vertical": "Bottom"
+        },
+        "state": "Empty"
+      },
+      {
+        "position": {
+          "horizontal": "HCenter",
+          "vertical": "Bottom"
+        },
+        "state": "Empty"
+      },
+      {
+        "position": {
+          "horizontal": "Right",
+          "vertical": "Bottom"
+        },
+        "state": "Empty"
+      }
+    ]
+  },
+  "position": {
+    "horizontal": "HCenter",
+    "vertical": "VCenter"
+  }
+}
