@@ -19,10 +19,10 @@ class GameStateSpec extends BaseSpec {
 
     "player X moves to the left top position, it" should {
       "result in an updated state" in {
-        val maybeUpdated = GameState.playerXMoves(start, CellPosition.LeftTop)
-        maybeUpdated should not be empty
+        val eitherUpdated = GameState.playerXMoves(start, CellPosition.LeftTop)
+        eitherUpdated should be(Symbol("right"))
 
-        val updated = maybeUpdated.get
+        val Right(updated) = eitherUpdated
         logger.debug(s"updated game state (after X moves): $updated")
 
         updated should not be start
@@ -33,10 +33,10 @@ class GameStateSpec extends BaseSpec {
 
     "player O moves to the right bottom position, it" should {
       "result in an updated state" in {
-        val maybeUpdated = GameState.playerOMoves(start, CellPosition.RightBottom)
-        maybeUpdated should not be empty
+        val eitherUpdated = GameState.playerOMoves(start, CellPosition.RightBottom)
+        eitherUpdated should be(Symbol("right"))
 
-        val updated = maybeUpdated.get
+        val Right(updated) = eitherUpdated
         logger.debug(s"updated game state (after O moves): $updated")
 
         updated should not be start
@@ -47,17 +47,29 @@ class GameStateSpec extends BaseSpec {
 
     "player X moves to the left top position and player O moves to the right bottom position, it" should {
       "result in an updated state" in {
-        val maybeAfterX  = GameState.playerXMoves(start, CellPosition.LeftTop)
-        val maybeAfterXO = maybeAfterX.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.RightBottom))
-        maybeAfterXO should not be empty
+        val eitherAfterX  = GameState.playerXMoves(start, CellPosition.LeftTop)
+        val eitherAfterXO = eitherAfterX.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.RightBottom))
+        eitherAfterXO should be(Symbol("right"))
 
-        val afterXO = maybeAfterXO.get
+        val Right(afterXO) = eitherAfterXO
         logger.debug(s"updated game state (after both X & O move): $afterXO")
 
         afterXO should not be start
         afterXO.isEmpty should be(false)
         afterXO.cells.head.state should be(CellState.X)
         afterXO.cells.last.state should be(CellState.O)
+      }
+    }
+
+    "player X moves to the left top position and player O tries moving to the same position, it" should {
+      "result in an updated state" in {
+        val eitherAfterX  = GameState.playerXMoves(start, CellPosition.LeftTop)
+        val eitherAfterXO = eitherAfterX.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.LeftTop))
+        eitherAfterXO should be(Symbol("left"))
+
+        val Left(reason) = eitherAfterXO
+        reason should not be empty
+        reason should startWith("Invalid")
       }
     }
 

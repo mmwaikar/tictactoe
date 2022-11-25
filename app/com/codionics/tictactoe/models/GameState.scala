@@ -102,24 +102,28 @@ object GameState {
     WinningPositions.map(wp => wp.map(cp => Cell(cp, state)))
   }
 
-  def playerXMoves(state: GameState, position: CellPosition): Option[GameState] = {
+  def playerXMoves(state: GameState, position: CellPosition): Either[String, GameState] = {
     val xCell = Cell.getXCell(position)
     play(state, xCell)
   }
 
-  def playerOMoves(state: GameState, position: CellPosition): Option[GameState] = {
+  def playerOMoves(state: GameState, position: CellPosition): Either[String, GameState] = {
     val oCell = Cell.getOCell(position)
     play(state, oCell)
   }
 
-  private def play(state: GameState, cell: Cell): Option[GameState] = {
+  private def play(state: GameState, cell: Cell): Either[String, GameState] = {
     val position            = cell.position
-    val maybeCellIndexTuple = state.cells.zipWithIndex.find(cellIndexTuple => cellIndexTuple._1.position == position)
-    val maybeUpdatedCells   = maybeCellIndexTuple.map(ciTuple => state.cells.updated(ciTuple._2, cell))
+    val maybeCellIndexTuple = state.cells.zipWithIndex.find { case (cell, index) =>
+      cell.isEmpty && cell.position == position
+    }
 
-    if (maybeUpdatedCells.isEmpty) logger.warn(s"unable to update the new position: $position")
-    else logger.debug(s"updated the new position: $position")
-
-    maybeUpdatedCells.map(updatedCells => state.copy(cells = updatedCells))
+    maybeCellIndexTuple match {
+      case None             => Left(s"Invalid cell position - either the position was not found or the cell was not empty.")
+      case Some((_, index)) => {
+        val updatedCells = state.cells.updated(index, cell)
+        Right(state.copy(cells = updatedCells))
+      }
+    }
   }
 }
