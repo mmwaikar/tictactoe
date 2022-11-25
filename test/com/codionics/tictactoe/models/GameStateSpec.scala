@@ -104,12 +104,8 @@ class GameStateSpec extends BaseSpec {
         twiceXs should not be start
         twiceXs.isEmpty should be(false)
 
-        val (maybeReason, maybeState, valid) = GameState.isValid(twiceXs)
-        logger.debug(s"reason: $maybeReason, valid: $valid")
-        maybeReason should not be (empty)
-        maybeReason.get should startWith("X")
-        maybeState should be(empty)
-        valid should be(false)
+        val eitherGameState = GameState.isValid(twiceXs)
+        eitherGameState should be(Symbol("left"))
       }
     }
 
@@ -119,12 +115,8 @@ class GameStateSpec extends BaseSpec {
         twiceOs should not be start
         twiceOs.isEmpty should be(false)
 
-        val (maybeReason, maybeState, valid) = GameState.isValid(twiceOs)
-        logger.debug(s"reason: $maybeReason, valid: $valid")
-        maybeReason should not be (empty)
-        maybeReason.get should startWith("O")
-        maybeState should be(empty)
-        valid should be(false)
+        val eitherGameState = GameState.isValid(twiceOs)
+        eitherGameState should be(Symbol("left"))
       }
     }
 
@@ -134,13 +126,11 @@ class GameStateSpec extends BaseSpec {
         afterXO should not be start
         afterXO.isEmpty should be(false)
 
-        val (maybeReason, maybeState, valid) = GameState.isValid(afterXO)
-        logger.debug(s"reason: $maybeReason, valid: $valid")
-        maybeReason should be(empty)
-        maybeState should not be (empty)
-        valid should be(true)
+        val eitherGameState = GameState.isValid(afterXO)
+        eitherGameState should be(Symbol("right"))
 
-        maybeState.get should be(afterXO)
+        val Right(gameState) = eitherGameState
+        gameState should be(afterXO)
       }
     }
   }
