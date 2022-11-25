@@ -83,3 +83,15 @@ A few sample JSON files are provided in the `docs` folder. The `illegal-moves` f
 This is a typical Scala application (that follows Java conventions) and the tests are in the 
 `test\com\codionics\tictactoe` folder. Majority of the tests are in the `GameStateSpec` class. The tests could be run
 through `sbt` using the `test` command.
+
+### Features that can be added
+
+Currently, the endpoints return an error (if any) as a string. Some proper JSON could be returned in the erroneous cases.
+
+## Future Improvements
+
+* [Scala 3.2.1](https://www.scala-lang.org/download/3.2.1.html) should be used, which introduces a lot of new features,
+including **Discriminated Unions** which help immensely in modeling the domain nicely (in a more type safe fashion).
+
+* Typed functional (effect systems) libraries like [Cats Effect](https://typelevel.org/cats-effect/) or 
+[ZIO](https://zio.dev/) should be used for even better / pure FP code.
