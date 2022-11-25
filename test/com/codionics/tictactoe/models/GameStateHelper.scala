@@ -18,20 +18,20 @@ object GameStateHelper {
 
   def getSampleXWonGame(): GameState = {
     val start        = GameState.startGame()
-    val maybeAfterX1 = GameState.playerXMoves(CellPosition.LeftTop, start)
+    val maybeAfterX1 = GameState.playerXMoves(start, CellPosition.LeftTop)
     // logger.debug(s"after 1 move, game state: ${maybeAfterX1.get}")
 
-    val maybeAfterX1O1 = maybeAfterX1.flatMap(afterX => GameState.playerOMoves(CellPosition.LeftBottom, afterX))
+    val maybeAfterX1O1 = maybeAfterX1.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.LeftBottom))
     // logger.debug(s"after 2 moves, game state: ${maybeAfterX1O1.get}")
 
-    val maybeAfterX2O1 = maybeAfterX1O1.flatMap(afterXO => GameState.playerXMoves(CellPosition.CenterTop, afterXO))
+    val maybeAfterX2O1 = maybeAfterX1O1.flatMap(afterXO => GameState.playerXMoves(afterXO, CellPosition.CenterTop))
     // logger.debug(s"after 3 moves, game state: ${maybeAfterX2O1.get}")
 
     val maybeAfterX2O2 =
-      maybeAfterX2O1.flatMap(afterXO => GameState.playerOMoves(CellPosition.CenterBottom, afterXO))
+      maybeAfterX2O1.flatMap(afterXO => GameState.playerOMoves(afterXO, CellPosition.CenterBottom))
     // logger.debug(s"after 4 moves, game state: ${maybeAfterX2O2.get}")
 
-    val maybeAfterX3O2 = maybeAfterX2O2.flatMap(afterXO => GameState.playerXMoves(CellPosition.RightTop, afterXO))
+    val maybeAfterX3O2 = maybeAfterX2O2.flatMap(afterXO => GameState.playerXMoves(afterXO, CellPosition.RightTop))
     // logger.debug(s"after 5 moves, game state: ${maybeAfterX3O2.get}")
 
     maybeAfterX3O2.getOrElse(start)
@@ -39,20 +39,20 @@ object GameStateHelper {
 
   def getSampleOWonGame(): GameState = {
     val start        = GameState.startGame()
-    val maybeAfterO1 = GameState.playerOMoves(CellPosition.LeftBottom, start)
+    val maybeAfterO1 = GameState.playerOMoves(start, CellPosition.LeftBottom)
     // logger.debug(s"after 1 move, game state: ${maybeAfterX1.get}")
 
-    val maybeAfterO1X1 = maybeAfterO1.flatMap(afterO => GameState.playerXMoves(CellPosition.LeftTop, afterO))
+    val maybeAfterO1X1 = maybeAfterO1.flatMap(afterO => GameState.playerXMoves(afterO, CellPosition.LeftTop))
     // logger.debug(s"after 2 moves, game state: ${maybeAfterX1O1.get}")
 
-    val maybeAfterO2X1 = maybeAfterO1X1.flatMap(afterOX => GameState.playerOMoves(CellPosition.CenterCenter, afterOX))
+    val maybeAfterO2X1 = maybeAfterO1X1.flatMap(afterOX => GameState.playerOMoves(afterOX, CellPosition.CenterCenter))
     // logger.debug(s"after 3 moves, game state: ${maybeAfterX2O1.get}")
 
     val maybeAfterO2X2 =
-      maybeAfterO2X1.flatMap(afterOX => GameState.playerXMoves(CellPosition.CenterTop, afterOX))
+      maybeAfterO2X1.flatMap(afterOX => GameState.playerXMoves(afterOX, CellPosition.CenterTop))
     // logger.debug(s"after 4 moves, game state: ${maybeAfterX2O2.get}")
 
-    val maybeAfterO3X2 = maybeAfterO2X2.flatMap(afterOX => GameState.playerOMoves(CellPosition.RightTop, afterOX))
+    val maybeAfterO3X2 = maybeAfterO2X2.flatMap(afterOX => GameState.playerOMoves(afterOX, CellPosition.RightTop))
     // logger.debug(s"after 5 moves, game state: ${maybeAfterX3O2.get}")
 
     maybeAfterO3X2.getOrElse(start)

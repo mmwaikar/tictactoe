@@ -19,7 +19,7 @@ class GameStateSpec extends BaseSpec {
 
     "player X moves to the left top position, it" should {
       "result in an updated state" in {
-        val maybeUpdated = GameState.playerXMoves(CellPosition.LeftTop, start)
+        val maybeUpdated = GameState.playerXMoves(start, CellPosition.LeftTop)
         maybeUpdated should not be empty
 
         val updated = maybeUpdated.get
@@ -33,7 +33,7 @@ class GameStateSpec extends BaseSpec {
 
     "player O moves to the right bottom position, it" should {
       "result in an updated state" in {
-        val maybeUpdated = GameState.playerOMoves(CellPosition.RightBottom, start)
+        val maybeUpdated = GameState.playerOMoves(start, CellPosition.RightBottom)
         maybeUpdated should not be empty
 
         val updated = maybeUpdated.get
@@ -47,8 +47,8 @@ class GameStateSpec extends BaseSpec {
 
     "player X moves to the left top position and player O moves to the right bottom position, it" should {
       "result in an updated state" in {
-        val maybeAfterX  = GameState.playerXMoves(CellPosition.LeftTop, start)
-        val maybeAfterXO = maybeAfterX.flatMap(afterX => GameState.playerOMoves(CellPosition.RightBottom, afterX))
+        val maybeAfterX  = GameState.playerXMoves(start, CellPosition.LeftTop)
+        val maybeAfterXO = maybeAfterX.flatMap(afterX => GameState.playerOMoves(afterX, CellPosition.RightBottom))
         maybeAfterXO should not be empty
 
         val afterXO = maybeAfterXO.get

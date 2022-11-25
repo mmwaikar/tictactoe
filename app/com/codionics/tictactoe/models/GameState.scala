@@ -77,17 +77,17 @@ object GameState {
     WinningPositions.map(wp => wp.map(cp => Cell(cp, state)))
   }
 
-  def playerXMoves(position: CellPosition, state: GameState): Option[GameState] = {
+  def playerXMoves(state: GameState, position: CellPosition): Option[GameState] = {
     val xCell = Cell.getXCell(position)
-    play(xCell, state)
+    play(state, xCell)
   }
 
-  def playerOMoves(position: CellPosition, state: GameState): Option[GameState] = {
+  def playerOMoves(state: GameState, position: CellPosition): Option[GameState] = {
     val oCell = Cell.getOCell(position)
-    play(oCell, state)
+    play(state, oCell)
   }
 
-  private def play(cell: Cell, state: GameState): Option[GameState] = {
+  private def play(state: GameState, cell: Cell): Option[GameState] = {
     val position            = cell.position
     val maybeCellIndexTuple = state.cells.zipWithIndex.find(cellIndexTuple => cellIndexTuple._1.position == position)
     val maybeUpdatedCells   = maybeCellIndexTuple.map(ciTuple => state.cells.updated(ciTuple._2, cell))
