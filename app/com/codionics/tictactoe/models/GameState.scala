@@ -103,13 +103,15 @@ object GameState {
   }
 
   def playerXMoves(state: GameState, position: CellPosition): Either[String, GameState] = {
-    val xCell = Cell.getXCell(position)
-    play(state, xCell)
+    val xCell        = Cell.getXCell(position)
+    val eitherPlayed = play(state, xCell)
+    eitherPlayed.flatMap(gs => GameState.isValid(gs))
   }
 
   def playerOMoves(state: GameState, position: CellPosition): Either[String, GameState] = {
-    val oCell = Cell.getOCell(position)
-    play(state, oCell)
+    val oCell        = Cell.getOCell(position)
+    val eitherPlayed = play(state, oCell)
+    eitherPlayed.flatMap(gs => GameState.isValid(gs))
   }
 
   private def play(state: GameState, cell: Cell): Either[String, GameState] = {

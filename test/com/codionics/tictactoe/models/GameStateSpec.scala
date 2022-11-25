@@ -113,22 +113,22 @@ class GameStateSpec extends BaseSpec {
     "player X moves twice, it" should {
       "result in an invalid state with the correct reason" in {
         val twiceXs = GameStateHelper.getSampleGameWithTwiceXMoves()
-        twiceXs should not be start
-        twiceXs.isEmpty should be(false)
+        twiceXs should not be Symbol("right")
 
-        val eitherGameState = GameState.isValid(twiceXs)
-        eitherGameState should be(Symbol("left"))
+        val Left(reason) = twiceXs
+        reason should not be empty
+        reason should startWith("X")
       }
     }
 
     "player O moves twice, it" should {
       "result in an invalid state with the correct reason" in {
         val twiceOs = GameStateHelper.getSampleGameWithTwiceOMoves()
-        twiceOs should not be start
-        twiceOs.isEmpty should be(false)
+        twiceOs should not be Symbol("right")
 
-        val eitherGameState = GameState.isValid(twiceOs)
-        eitherGameState should be(Symbol("left"))
+        val Left(reason) = twiceOs
+        reason should not be empty
+        reason should startWith("O")
       }
     }
 
